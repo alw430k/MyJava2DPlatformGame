@@ -13,19 +13,6 @@ import java.awt.event.MouseEvent;
 import java.text.DecimalFormat;
 
 import javax.swing.JPanel;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JPanel;
-
 
 public abstract class GamePanel extends JPanel implements Runnable {
 	private static final long serialVersionUID = 1863596360846514344L;
@@ -235,7 +222,7 @@ public abstract class GamePanel extends JPanel implements Runnable {
 			framesSkipped += skips;
 			storeStats();
 		}
-		
+		printStats();
 		System.exit(0); // so window disappears
 	} // end of run()
 
@@ -255,9 +242,7 @@ public abstract class GamePanel extends JPanel implements Runnable {
 		// clear the background
 		dbg.setColor(Color.white);
 		dbg.fillRect(0, 0, PWIDTH, PHEIGHT);
-
 		simpleRender(dbg);
-
 		if (gameOver)
 			gameOverMessage(dbg);
 	} // end of gameRender()
@@ -336,6 +321,14 @@ public abstract class GamePanel extends JPanel implements Runnable {
 		}
 	} // end of storeStats()
 
+	private void printStats() {
+		System.out.println("Frame Count/Loss: " + frameCount + " / "
+				+ totalFramesSkipped);
+		System.out.println("Average FPS: " + df.format(averageFPS));
+		System.out.println("Average UPS: " + df.format(averageUPS));
+		System.out.println("Time Spent: " + timeSpentInGame + " secs");
+	} // end of printStats()
+
 	/**
 	 * Should implement game specific rendering
 	 * 
@@ -357,6 +350,8 @@ public abstract class GamePanel extends JPanel implements Runnable {
 	 * This just gets called when a click occurs, no default behavior
 	 */
 	protected abstract void mousePress(int x, int y);
+	
+	protected abstract void keyPress(KeyEvent e, boolean pressed);
 
 	/**
 	 * Should be overridden to initialize the game specific components
